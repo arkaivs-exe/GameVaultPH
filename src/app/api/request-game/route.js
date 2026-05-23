@@ -1,7 +1,13 @@
-import { Resend } from 'resend';
-import { games, getDriveDownloadUrl } from '../../data/games';
+import nodemailer from 'nodemailer';
+import { games } from '../../data/games';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
+  },
+});
 
 function generateApproveToken(gameId, email) {
   const secret = process.env.APPROVE_SECRET || 'gamevault-secret-2025';
@@ -22,15 +28,14 @@ export async function POST(request) {
       return Response.json({ error: 'Game not found' }, { status: 404 });
     }
 
-    const downloadLink = getDriveDownloadUrl(game.driveId);
     const token = generateApproveToken(game.id, email);
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const approveUrl = `${baseUrl}/api/approve?token=${token}&gameId=${game.id}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`;
     const rejectUrl  = `${baseUrl}/api/approve?token=${token}&gameId=${game.id}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&reject=true`;
 
     // Email to store owner
-    await resend.emails.send({
-      from: 'onboarding@resend.dev',
+    await transporter.sendMail({
+      from: `"GameVault PH" <${process.env.GMAIL_USER}>`,
       to: 'kaipancho98@gmail.com',
       subject: `🎮 New Request: ${game.title} — ${name}`,
       html: `
@@ -67,8 +72,8 @@ export async function POST(request) {
     });
 
     // Confirmation email to buyer
-    await resend.emails.send({
-      from: 'onboarding@resend.dev',
+    await transporter.sendMail({
+      from: `"GameVault PH" <${process.env.GMAIL_USER}>`,
       to: email,
       subject: `⏳ Request Received: ${game.title}`,
       html: `
@@ -96,7 +101,7 @@ export async function POST(request) {
             </p>
           </div>
 
-          <p style="color: #555; font-size: 12px; margin-top: 24px; text-align: center;">Questions? Email kaipancho98@gmail.com</p>
+          <p style="color: #555; font-size: 12px; margin-top: 24px; text-align: center;">Questions? Email nmipancho98@gmail.com</p>
         </div>
       `,
     });
