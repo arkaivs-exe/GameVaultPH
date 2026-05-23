@@ -1,0 +1,670 @@
+/* MAIN */
+.main {
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+/* HEADER */
+.header {
+  border-bottom: 1px solid var(--border);
+  background: rgba(8, 8, 16, 0.95);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.headerInner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logoIcon {
+  font-size: 28px;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.logoTitle {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  color: var(--accent);
+  letter-spacing: 4px;
+  line-height: 1;
+}
+
+.logoSub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--text-muted);
+  letter-spacing: 3px;
+  margin-top: 2px;
+}
+
+.headerBadge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* HERO */
+.hero {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 64px 24px 40px;
+  text-align: center;
+}
+
+.heroTitle {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 8vw, 96px);
+  letter-spacing: 8px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.heroSub {
+  font-size: 16px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  font-weight: 500;
+}
+
+/* CONTROLS */
+.controls {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.search {
+  width: 100%;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 20px;
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.2s;
+  letter-spacing: 1px;
+}
+
+.search:focus {
+  border-color: var(--accent);
+}
+
+.search::placeholder {
+  color: var(--text-muted);
+}
+
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.catBtn {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 8px 16px;
+  color: var(--text-dim);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.catBtn:hover {
+  border-color: var(--border-bright);
+  color: var(--text);
+}
+
+.catActive {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000 !important;
+}
+
+/* RESULT COUNT */
+.resultCount {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px 20px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+}
+
+.countNum {
+  color: var(--accent);
+  font-size: 16px;
+}
+
+/* GRID */
+.grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* CARD */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: fadeUp 0.4s ease both;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.card:hover {
+  border-color: var(--border-bright);
+  background: var(--card-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardCat {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--accent3);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  padding: 3px 8px;
+  border-radius: 3px;
+}
+
+.cardPrice {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  color: var(--accent);
+  letter-spacing: 1px;
+}
+
+.cardTitle {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+  letter-spacing: 0.5px;
+}
+
+.cardDesc {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.5;
+  flex: 1;
+}
+
+.cardBtn {
+  margin-top: 4px;
+  background: transparent;
+  border: 1px solid var(--border-bright);
+  border-radius: 4px;
+  padding: 10px 14px;
+  color: var(--text-dim);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card:hover .cardBtn {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000;
+}
+
+.cardBtnArrow {
+  transition: transform 0.2s;
+}
+
+.card:hover .cardBtnArrow {
+  transform: translateX(4px);
+}
+
+/* EMPTY */
+.empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--text-muted);
+}
+
+.emptyIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  padding: 48px 24px 24px;
+  color: var(--text-muted);
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+/* OVERLAY */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* MODAL */
+.modal {
+  background: var(--bg2);
+  border: 1px solid var(--border-bright);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.closeBtn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  z-index: 10;
+  transition: all 0.2s;
+}
+
+.closeBtn:hover {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+
+.modalHeader {
+  padding: 32px 28px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modalCat {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: var(--accent3);
+  letter-spacing: 2px;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  padding: 3px 8px;
+  border-radius: 3px;
+}
+
+.modalTitle {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 12px 0 8px;
+  line-height: 1.2;
+}
+
+.modalDesc {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.modalPrice {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  color: var(--accent);
+  letter-spacing: 2px;
+}
+
+.modalBody {
+  padding: 24px 28px 28px;
+}
+
+.modalInstruction {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  padding: 14px;
+  background: var(--bg3);
+  border-radius: 6px;
+  border-left: 3px solid var(--accent);
+}
+
+.formGroup {
+  margin-bottom: 16px;
+}
+
+.label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.input {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 16px;
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-color: var(--accent);
+}
+
+.errorMsg {
+  color: var(--red);
+  font-size: 13px;
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  background: rgba(255, 58, 58, 0.1);
+  border-radius: 4px;
+  border-left: 3px solid var(--red);
+}
+
+.submitBtn {
+  width: 100%;
+  background: var(--accent);
+  border: none;
+  border-radius: 6px;
+  padding: 16px;
+  color: #000;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: #ffd700;
+  transform: translateY(-1px);
+}
+
+.submitBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* PAYMENT STEP */
+.paymentStep {
+  padding: 40px 28px;
+  text-align: center;
+}
+
+.successIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #000;
+  font-size: 28px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  box-shadow: 0 0 30px rgba(57, 255, 20, 0.4);
+}
+
+.paymentTitle {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  letter-spacing: 4px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.paymentSub {
+  color: var(--text-dim);
+  margin-bottom: 24px;
+  font-size: 15px;
+}
+
+.paymentCard {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.paymentRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+}
+
+.paymentRow:last-child {
+  border-bottom: none;
+}
+
+.paymentGame {
+  color: var(--text);
+  font-weight: 700;
+  text-align: right;
+  max-width: 60%;
+}
+
+.paymentAmount {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  color: var(--accent);
+}
+
+.gcashCard {
+  background: linear-gradient(135deg, #002b5c, #001a3a);
+  border: 1px solid #0066cc;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.gcashLabel {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #6699cc;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.gcashNumber {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 28px;
+  color: #fff;
+  letter-spacing: 4px;
+  margin-bottom: 8px;
+}
+
+.gcashTip {
+  font-size: 12px;
+  color: #6699cc;
+  font-style: italic;
+}
+
+.nextSteps {
+  background: var(--bg3);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.nextSteps p {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.8;
+}
+
+.nextSteps strong {
+  color: var(--text);
+}
+
+.doneBtn {
+  background: transparent;
+  border: 1px solid var(--border-bright);
+  border-radius: 6px;
+  padding: 12px 32px;
+  color: var(--text-dim);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.doneBtn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* RESPONSIVE */
+@media (max-width: 640px) {
+  .headerBadge { display: none; }
+  .grid { grid-template-columns: 1fr; }
+  .modal { max-height: 95vh; }
+}
+
+/* QR CODE */
+.qrWrapper {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0 12px;
+}
+
+.qrImage {
+  border-radius: 8px;
+  border: 3px solid #0066cc;
+}
+
+.gcashOrDivider {
+  color: #4a6a8a;
+  font-size: 11px;
+  letter-spacing: 2px;
+  margin: 8px 0;
+}
