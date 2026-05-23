@@ -32,7 +32,7 @@ export async function GET(request) {
     return new Response('Invalid or expired token.', { status: 403 });
   }
 
-  const game = games.find(g => g.id === gameId);
+  const game = games.find(g => g.id === Number(gameId));
   if (!game) {
     return new Response('Game not found.', { status: 404 });
   }
