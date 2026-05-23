@@ -14,6 +14,13 @@ export default function Home() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  // Suggest modal state
+  const [showSuggest, setShowSuggest] = useState(false)
+  const [suggestForm, setSuggestForm] = useState({ name: '', email: '', gameTitle: '', notes: '' })
+  const [suggestLoading, setSuggestLoading] = useState(false)
+  const [suggestError, setSuggestError] = useState('')
+  const [suggestDone, setSuggestDone] = useState(false)
+
   const filtered = useMemo(() => {
     return games.filter(g => {
       const matchCat = activeCategory === 'All' || g.category === activeCategory
@@ -73,6 +80,53 @@ export default function Home() {
     }
   }
 
+  const openSuggest = () => {
+    setShowSuggest(true)
+    setSuggestForm({ name: '', email: '', gameTitle: '', notes: '' })
+    setSuggestError('')
+    setSuggestDone(false)
+  }
+
+  const closeSuggest = () => {
+    setShowSuggest(false)
+    setSuggestError('')
+    setSuggestDone(false)
+  }
+
+  const handleSuggestSubmit = async () => {
+    if (!suggestForm.name.trim() || !suggestForm.email.trim() || !suggestForm.gameTitle.trim()) {
+      setSuggestError('Please fill in your name, email, and the game title.')
+      return
+    }
+    if (!/\S+@\S+\.\S+/.test(suggestForm.email)) {
+      setSuggestError('Please enter a valid email address.')
+      return
+    }
+
+    setSuggestLoading(true)
+    setSuggestError('')
+
+    try {
+      const res = await fetch('/api/suggest-game', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(suggestForm),
+      })
+
+      const data = await res.json()
+
+      if (data.success) {
+        setSuggestDone(true)
+      } else {
+        setSuggestError('Something went wrong. Please try again.')
+      }
+    } catch {
+      setSuggestError('Network error. Please try again.')
+    } finally {
+      setSuggestLoading(false)
+    }
+  }
+
   const categoryList = ['All', ...categories]
 
   return (
@@ -87,9 +141,14 @@ export default function Home() {
               <div className={styles.logoSub}>PH · PC GAMES STORE</div>
             </div>
           </div>
-          <div className={styles.headerBadge}>
-            <span className={styles.dot}></span>
-            {games.length} TITLES AVAILABLE
+          <div className={styles.headerRight}>
+            <div className={styles.headerBadge}>
+              <span className={styles.dot}></span>
+              {games.length} TITLES AVAILABLE
+            </div>
+            <button className={styles.suggestBtn} onClick={openSuggest}>
+              + REQUEST A GAME
+            </button>
           </div>
         </div>
       </header>
@@ -99,6 +158,9 @@ export default function Home() {
         <div className={styles.heroText}>
           <h1 className={styles.heroTitle}>PREMIUM PC GAMES</h1>
           <p className={styles.heroSub}>Pay via GCash · Get download link via email · ₱200 per game</p>
+          <button className={styles.heroSuggestBtn} onClick={openSuggest}>
+            <span>🔍</span> Can't find your game? Request it here
+          </button>
         </div>
       </section>
 
@@ -155,6 +217,9 @@ export default function Home() {
           <div className={styles.empty}>
             <div className={styles.emptyIcon}>🎮</div>
             <p>No games found for "{search}"</p>
+            <button className={styles.emptySuggestBtn} onClick={openSuggest}>
+              Request "{search}" to be added →
+            </button>
           </div>
         )}
       </div>
@@ -164,7 +229,7 @@ export default function Home() {
         <p>© 2025 GameVault PH · GCash: 09296729143 · kaipancho98@gmail.com</p>
       </footer>
 
-      {/* Modal */}
+      {/* Buy Modal */}
       {selectedGame && (
         <div className={styles.overlay} onClick={(e) => e.target === e.currentTarget && closeModal()}>
           <div className={styles.modal}>
@@ -260,6 +325,99 @@ export default function Home() {
 
                 <button className={styles.doneBtn} onClick={closeModal}>
                   DONE
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Suggest Game Modal */}
+      {showSuggest && (
+        <div className={styles.overlay} onClick={(e) => e.target === e.currentTarget && closeSuggest()}>
+          <div className={styles.modal}>
+            <button className={styles.closeBtn} onClick={closeSuggest}>✕</button>
+
+            {!suggestDone ? (
+              <>
+                <div className={styles.modalHeader}>
+                  <span className={styles.suggestTag}>GAME REQUEST</span>
+                  <h2 className={styles.modalTitle}>Request a Game</h2>
+                  <p className={styles.modalDesc}>
+                    Don't see a game in our store? Let us know and we'll try to add it!
+                  </p>
+                </div>
+
+                <div className={styles.modalBody}>
+                  <div className={styles.formGroup}>
+                    <label className={styles.label}>Your Name</label>
+                    <input
+                      className={styles.input}
+                      type="text"
+                      placeholder="Juan dela Cruz"
+                      value={suggestForm.name}
+                      onChange={e => setSuggestForm({ ...suggestForm, name: e.target.value })}
+                    />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label className={styles.label}>Your Email</label>
+                    <input
+                      className={styles.input}
+                      type="email"
+                      placeholder="juan@email.com"
+                      value={suggestForm.email}
+                      onChange={e => setSuggestForm({ ...suggestForm, email: e.target.value })}
+                    />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label className={styles.label}>Game Title <span className={styles.required}>*</span></label>
+                    <input
+                      className={`${styles.input} ${styles.inputHighlight}`}
+                      type="text"
+                      placeholder="e.g. Elden Ring, Baldur's Gate 3..."
+                      value={suggestForm.gameTitle}
+                      onChange={e => setSuggestForm({ ...suggestForm, gameTitle: e.target.value })}
+                    />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label className={styles.label}>Additional Notes <span className={styles.optional}>(optional)</span></label>
+                    <textarea
+                      className={styles.textarea}
+                      placeholder="Any details about the game, version, DLCs, etc."
+                      value={suggestForm.notes}
+                      onChange={e => setSuggestForm({ ...suggestForm, notes: e.target.value })}
+                      rows={3}
+                    />
+                  </div>
+
+                  {suggestError && <p className={styles.errorMsg}>{suggestError}</p>}
+
+                  <button
+                    className={styles.submitBtn}
+                    onClick={handleSuggestSubmit}
+                    disabled={suggestLoading}
+                  >
+                    {suggestLoading ? 'SENDING REQUEST...' : 'SUBMIT REQUEST →'}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className={styles.paymentStep}>
+                <div className={styles.successIcon}>✓</div>
+                <h2 className={styles.paymentTitle}>REQUEST SENT!</h2>
+                <p className={styles.paymentSub}>
+                  Thanks {suggestForm.name}! We've received your request for{' '}
+                  <strong className={styles.suggestGameName}>{suggestForm.gameTitle}</strong>.
+                </p>
+                <div className={styles.nextSteps}>
+                  <p>📧 We'll notify <strong>{suggestForm.email}</strong> when it's available</p>
+                  <p>⏳ We review requests regularly and add games as soon as possible</p>
+                </div>
+                <button className={styles.doneBtn} onClick={closeSuggest}>
+                  CLOSE
                 </button>
               </div>
             )}
