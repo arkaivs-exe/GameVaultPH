@@ -1,68 +1,75 @@
-import { Resend } from "resend";
+import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function GET(req) {
+export async function POST(request) {
   try {
-    const { searchParams } = new URL(req.url);
+    const { name, email, gameTitle, notes } = await request.json();
 
-    const email = searchParams.get("email");
-    const name = searchParams.get("name");
-    const game = searchParams.get("game");
-    const link = searchParams.get("link");
-    const secret = searchParams.get("secret");
-
-    if (secret !== process.env.APPROVAL_SECRET) {
-      return new Response("Unauthorized approval link.", { status: 401 });
+    if (!name || !email || !gameTitle) {
+      return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    if (!email || !game || !link) {
-      return new Response("Missing email, game, or link.", { status: 400 });
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      return Response.json({ error: 'Invalid email address' }, { status: 400 });
     }
 
+    // Email to store owner
     await resend.emails.send({
-      from: "Game Store <onboarding@resend.dev>",
-      to: email,
-      subject: `Your request for ${game} has been approved`,
+      from: 'onboarding@resend.dev',
+      to: 'kaipancho98@gmail.com',
+      subject: `🎮 Game Request: ${gameTitle} — from ${name}`,
       html: `
-        <h2>Your game request has been approved!</h2>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0f0f0f; color: #fff; padding: 32px; border-radius: 12px;">
+          <h1 style="color: #f5c518; margin-bottom: 4px;">New Game Suggestion!</h1>
+          <p style="color: #aaa; margin-bottom: 28px;">A customer requested a game not currently in the store.</p>
 
-        <p>Hi ${name || "there"},</p>
+          <div style="background: #1a1a1a; padding: 20px; border-radius: 8px; margin-bottom: 16px;">
+            <p style="margin: 0 0 8px 0;"><span style="color: #f5c518;">Name:</span> <strong>${name}</strong></p>
+            <p style="margin: 0 0 8px 0;"><span style="color: #f5c518;">Email:</span> ${email}</p>
+            <p style="margin: 0 0 8px 0;"><span style="color: #f5c518;">Game Requested:</span> <strong style="color: #00d4ff; font-size: 18px;">${gameTitle}</strong></p>
+            ${notes ? `<p style="margin: 0;"><span style="color: #f5c518;">Notes:</span> ${notes}</p>` : ''}
+          </div>
 
-        <p>Your request for <strong>${game}</strong> has been approved.</p>
-
-        <p>You may access it here:</p>
-
-        <a href="${link}" 
-          style="background:#111;color:white;padding:12px 18px;text-decoration:none;border-radius:8px;">
-          Open Game Link
-        </a>
-
-        <br /><br />
-
-        <p>If the button does not work, copy and paste this link:</p>
-        <p>${link}</p>
+          <p style="color: #555; font-size: 12px; margin-top: 24px; text-align: center;">
+            GameVault PH · Game Suggestion System
+          </p>
+        </div>
       `,
     });
 
-    return new Response(
-      `
-      <html>
-        <body style="font-family: Arial; padding: 40px;">
-          <h1>Request Approved</h1>
-          <p>The game link has been sent to ${email}.</p>
-        </body>
-      </html>
-      `,
-      {
-        headers: {
-          "Content-Type": "text/html",
-        },
-      }
-    );
-  } catch (error) {
-    console.error("Approval error:", error);
+    // Confirmation email to the requester
+    await resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to: email,
+      subject: `✅ Game Request Noted: ${gameTitle}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0f0f0f; color: #fff; padding: 32px; border-radius: 12px;">
+          <h1 style="color: #f5c518;">Request Received! 🎮</h1>
+          <p style="color: #aaa;">Hi ${name}, we've noted your game request.</p>
 
-    return new Response("Failed to approve request.", { status: 500 });
+          <div style="background: #1a1a1a; padding: 20px; border-radius: 8px; margin: 24px 0;">
+            <p style="color: #888; margin: 0 0 4px 0; font-size: 12px;">GAME REQUESTED</p>
+            <p style="color: #00d4ff; font-size: 22px; font-weight: bold; margin: 0;">${gameTitle}</p>
+          </div>
+
+          <div style="background: #1a1a2a; padding: 16px; border-radius: 8px;">
+            <p style="color: #ccc; margin: 0; line-height: 2;">
+              We'll review your request and add it to the store if available.<br>
+              We'll notify you at <strong style="color: #fff;">${email}</strong> once it's listed. 📧
+            </p>
+          </div>
+
+          <p style="color: #555; font-size: 12px; margin-top: 24px; text-align: center;">
+            Questions? Email kaipancho98@gmail.com · GameVault PH
+          </p>
+        </div>
+      `,
+    });
+
+    return Response.json({ success: true });
+  } catch (error) {
+    console.error('Error:', error);
+    return Response.json({ error: 'Failed to send request' }, { status: 500 });
   }
 }
