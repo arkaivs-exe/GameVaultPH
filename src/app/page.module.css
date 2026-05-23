@@ -668,3 +668,138 @@
   letter-spacing: 2px;
   margin: 8px 0;
 }
+
+/* HEADER RIGHT */
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* SUGGEST BUTTON (header) */
+.suggestBtn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--accent3);
+  background: transparent;
+  border: 1px solid var(--accent3);
+  border-radius: 4px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.suggestBtn:hover {
+  background: var(--accent3);
+  color: #000;
+}
+
+/* HERO SUGGEST BUTTON */
+.heroSuggestBtn {
+  margin-top: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.heroSuggestBtn:hover {
+  border-color: var(--accent3);
+  color: var(--accent3);
+}
+
+/* EMPTY STATE SUGGEST BUTTON */
+.emptySuggestBtn {
+  margin-top: 16px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--accent3);
+  background: transparent;
+  border: 1px solid var(--accent3);
+  border-radius: 6px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.emptySuggestBtn:hover {
+  background: var(--accent3);
+  color: #000;
+}
+
+/* SUGGEST TAG */
+.suggestTag {
+  display: inline-block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--accent3);
+  border: 1px solid var(--accent3);
+  border-radius: 3px;
+  padding: 3px 8px;
+  margin-bottom: 10px;
+}
+
+/* SUGGEST GAME NAME (success) */
+.suggestGameName {
+  color: var(--accent3);
+}
+
+/* TEXTAREA */
+.textarea {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 16px;
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.2s;
+  letter-spacing: 0.5px;
+  line-height: 1.5;
+}
+
+.textarea:focus {
+  border-color: var(--accent3);
+}
+
+.textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* INPUT HIGHLIGHT (game title field) */
+.inputHighlight:focus {
+  border-color: var(--accent3);
+  box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.08);
+}
+
+/* REQUIRED / OPTIONAL LABELS */
+.required {
+  color: var(--accent2);
+  margin-left: 2px;
+}
+
+.optional {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 400;
+  margin-left: 4px;
+}
